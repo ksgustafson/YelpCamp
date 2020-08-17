@@ -27,9 +27,20 @@ router.post('/', isLoggedIn, function (req, res) {
     const name = req.body.name;
     const image = req.body.image;
     const description = req.body.description;
-
+    
+    // create author object
+    const author = {
+	id: req.user._id,
+	username: req.user.username
+    };
+    
     // create new campground object
-    const newCampground = {name: name, image: image, description: description};
+    const newCampground = {
+	name: name,
+	image: image,
+	description: description,
+	author: author
+    };
     
     // add new campground to database
     Campground.create(newCampground, function (err, newlyCreated) {
@@ -38,7 +49,7 @@ router.post('/', isLoggedIn, function (req, res) {
 	    console.log(err)
 	} else {
 	    // redirect back to campgrounds page
-	    res.redirect('/');
+	    res.redirect('/campgrounds');
 	}
     });
 
