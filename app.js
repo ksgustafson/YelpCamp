@@ -1,10 +1,17 @@
-const express    = require('express'),
-      app        = express(),
-      bodyParser = require('body-parser'),
-      mongoose   = require('mongoose'),
-      Campground = require('./models/campground'),
-      Comment    = require('./models/comment'),
-      seedDB     = require('./seeds');
+// check for PORT from environment (for running on a cloud server)
+// and use 3000 as a fallback
+const PORT = process.env.PORT || 3000;
+
+const express       = require('express'),
+      app           = express(),
+      bodyParser    = require('body-parser'),
+      mongoose      = require('mongoose'),
+      passport      = require('passport'),
+      LocalStrategy = require('passport-local'),
+      Campground    = require('./models/campground'),
+      Comment       = require('./models/comment'),
+      User          = require('./models/user'),
+      seedDB        = require('./seeds');
 
 mongoose.connect('mongodb://localhost:27017/yelp_camp', {
     useNewUrlParser: true,
@@ -21,29 +28,41 @@ app.use(express.static(`${__dirname}/public`));
 // seed database with campgrounds and comments
 seedDB();
 
-/* for adding manually
-Campground.create(
-    {
-	name: 'Granite Hill',
-	image: 'https://images.unsplash.com/photo-1476041800959-2f6bb412c8ce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80',
-	description: 'It's a hill... well a pile really... of granite. Plenty of flat surfaces to sleep on.'
+// passport configuration
 
-    }, function (err, newlyCreated) {
-    if (err) {
-	// error
-	console.log(err)
-    } else {
-	// new campground was added successfully
-	console.log('success in adding: ');
-	console.log(newlyCreated);
-    }
+// setup express session
+app.use(require('express-session')({
+    secret: 'another horribly insecure secret',
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+// to replace secret with env var:
+//   1 - generate a secret in the shell with something like:
+//         head -c20 /dev/urandom | base64
+//       example output: GNSO5LU4617LlRPL6HrkXTiKSwc=
+//   2 - keep that secret in a password vault (basically admin password)
+//   3 - pass secret when starting the server:
+//         SESSION_SECRET='GNSO5LU4617LlRPL6HrkXTiKSwc=' node app.js
+//   4 - define secret here with:
+//         secret: process.env.SESSION_SECRET   
+
+// middleware to run on each route
+//   to make current user accessible for each route
+app.use( function (req, res, next) {
+    res.locals.currentUser = req.user;
+    next();
 });
-*/
 
 app.get('/', function (req, res) {
     res.render('landing');
 });
 
+// index route - show all campgrounds
 app.get('/campgrounds', function (req, res) {
     // get all campgrounds from database
     Campground.find({}, function (err, allCampgrounds) {
@@ -57,10 +76,12 @@ app.get('/campgrounds', function (req, res) {
     });
 });
 
+// new route - add a new campground
 app.get('/campgrounds/new', function (req, res) {
     res.render('campgrounds/new');
 });
 
+// create route - save new campground in database
 app.post('/campgrounds', function (req, res) {
     // get data from form
     const name = req.body.name;
@@ -100,8 +121,8 @@ app.get('/campgrounds/:id', function (req, res) {
 // comments routes
 // +++++++++++++++++++++++
 
-// new comment route
-app.get('/campgrounds/:id/comments/new', function (req, res) {
+// new comment route (only accessible if logged in)
+app.get('/campgrounds/:id/comments/new', isLoggedIn, function (req, res) {
     // find campground by id
     Campground.findById(req.params.id, function (err, campground) {
 	if (err) {
@@ -112,8 +133,8 @@ app.get('/campgrounds/:id/comments/new', function (req, res) {
     });
 });
 
-// create comment route
-app.post('/campgrounds/:id/comments', function (req, res) {
+// create comment route (and prevent anyone from adding a comment if they are not logged in)
+app.post('/campgrounds/:id/comments', isLoggedIn, function (req, res) {
     // look up campground using id
     Campground.findById(req.params.id, function (err, campground) {
 	if (err) {
@@ -133,6 +154,55 @@ app.post('/campgrounds/:id/comments', function (req, res) {
     });
 });
 
-app.listen(3000, function () {
-    console.log('YelpCamp server is listening on port 3000.');
+// ~~@~~~@~@~@~@@@~
+// auth routes
+// ~~@~~~@~@~@~@@@~
+
+// show register form
+app.get('/register', function (req, res) {
+    res.render('register');
+});
+
+// sign up logic
+app.post('/register', function (req, res) {
+    const newUser = new User({username: req.body.username});
+    User.register(newUser, req.body.password, function (err, user) {
+	if (err) {
+	    console.log(err);
+	    return res.render('register');
+	}
+	passport.authenticate("local") (req, res, function() {
+	    res.redirect('/campgrounds');
+	});
+    });
+});
+
+// show login form
+app.get('/login', function (req, res) {
+    res.render('login');
+});
+
+// login logic
+app.post('/login', passport.authenticate('local',
+    {
+	successRedirect: '/campgrounds',
+	failureRedirect: '/login'
+    }), function (req, res) {
+});
+
+// logout route
+app.get('/logout', function (req, res) {
+    req.logout();
+    res.redirect('/campgrounds');
+});
+
+function isLoggedIn (req, res, next) {
+    if (req.isAuthenticated()) {
+	return next();
+    }
+    res.redirect('/login');
+}
+
+app.listen(PORT, function () {
+    console.log(`YelpCamp server is listening on port ${PORT}.`);
 });
