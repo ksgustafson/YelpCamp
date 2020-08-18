@@ -1,6 +1,7 @@
-// check for PORT from environment (for running on a cloud server)
-// and use 3000 as a fallback
+// check for PORT and IP from environment (for running on a cloud server)
+// and use localhost:3000 as a fallback
 const PORT = process.env.PORT || 3000;
+const IP = process.env.IP || 'localhost';
 
 const express        = require('express'),
       app            = express(),
@@ -74,6 +75,6 @@ app.use('/', indexRoutes);
 app.use('/campgrounds', campgroundRoutes);
 app.use('/campgrounds/:id/comments', commentRoutes);
 
-app.listen(PORT, function () {
+app.listen(PORT, IP, function () {
     console.log(`YelpCamp server is listening on port ${PORT}.`);
 });
