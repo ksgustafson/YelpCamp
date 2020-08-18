@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Comment = require('./models/comment');
 const Campground = require('./models/campground');
 
+
 const seeds = [
     {
 	name: "Cloud's Rest",
@@ -27,7 +28,7 @@ async function seedDB () {
 	await Comment.deleteMany({});
 	console.log('comments removed');
 
-	for ( const seed of seeds ) {
+/*	for ( const seed of seeds ) {
 	    const campground = await Campground.create(seed);
 	    console.log('campground created');
 	    const comment = await Comment.create(
@@ -40,10 +41,11 @@ async function seedDB () {
 	    campground.comments.push(comment);
 	    campground.save();
 	    console.log('comment added to campground');
-*/	}
-    } catch (err) {
+	}
+*/    } catch (err) {
 	console.log(err);
     }
+
 };
 
 module.exports = seedDB;

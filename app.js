@@ -2,8 +2,9 @@
 // and use localhost:3000 as a fallback
 const PORT = process.env.PORT || 3000;
 const IP = process.env.IP || 'localhost';
-// define mongoDB url
-const mongoURI = 'mongodb+srv://kyle:y2TByLmQhWSzOJvg@yelpcamp.aky80.mongodb.net/yelp_camp?retryWrites=true&w=majority';
+
+// get database url from environment
+const databaseURL = process.env.DATABASEURL || 'mongodb://localhost:27017/yelp_camp';
 
 const express        = require('express'),
       app            = express(),
@@ -23,7 +24,7 @@ const commentRoutes    = require('./routes/comments'),
       campgroundRoutes = require('./routes/campgrounds'),
       indexRoutes       = require('./routes/index');
 
-mongoose.connect(mongoURI, {
+mongoose.connect(databaseURL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false
