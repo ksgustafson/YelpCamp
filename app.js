@@ -1,7 +1,6 @@
-// check for PORT and IP from environment (for running on a cloud server)
-// and use localhost:3000 as a fallback
+// check for PORT from environment (for running on a cloud server)
+// and use 3000 as a fallback
 const PORT = process.env.PORT || 3000;
-const IP = process.env.IP || 'localhost';
 
 // get database url from environment
 const databaseURL = process.env.DATABASEURL || 'mongodb://localhost:27017/yelp_camp';
@@ -78,6 +77,6 @@ app.use('/', indexRoutes);
 app.use('/campgrounds', campgroundRoutes);
 app.use('/campgrounds/:id/comments', commentRoutes);
 
-app.listen(PORT, IP, function () {
+app.listen(PORT, function () {
     console.log(`YelpCamp server is listening on port ${PORT}.`);
 });
