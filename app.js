@@ -2,16 +2,17 @@
 // and use 3000 as a fallback
 const PORT = process.env.PORT || 3000;
 
-const express       = require('express'),
-      app           = express(),
-      bodyParser    = require('body-parser'),
-      mongoose      = require('mongoose'),
-      passport      = require('passport'),
-      LocalStrategy = require('passport-local'),
-      Campground    = require('./models/campground'),
-      Comment       = require('./models/comment'),
-      User          = require('./models/user'),
-      seedDB        = require('./seeds');
+const express        = require('express'),
+      app            = express(),
+      bodyParser     = require('body-parser'),
+      mongoose       = require('mongoose'),
+      passport       = require('passport'),
+      LocalStrategy  = require('passport-local'),
+      methodOverride = require('method-override'),
+      Campground     = require('./models/campground'),
+      Comment        = require('./models/comment'),
+      User           = require('./models/user'),
+      seedDB         = require('./seeds');
 
 // require routes
 const commentRoutes    = require('./routes/comments'),
@@ -29,6 +30,7 @@ mongoose.connect('mongodb://localhost:27017/yelp_camp', {
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
 app.use(express.static(`${__dirname}/public`));
+app.use(methodOverride('_method'));
 
 // seed database with campgrounds and comments
 // seedDB();
