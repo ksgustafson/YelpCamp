@@ -28,6 +28,7 @@ router.get('/new', middleware.isLoggedIn, function (req, res) {
 router.post('/', middleware.isLoggedIn, function (req, res) {
     // get data from form
     const name = req.body.name;
+    const price = req.body.price;
     const image = req.body.image;
     const description = req.body.description;
     
@@ -40,6 +41,7 @@ router.post('/', middleware.isLoggedIn, function (req, res) {
     // create new campground object
     const newCampground = {
 	name: name,
+	price: price,
 	image: image,
 	description: description,
 	author: author
