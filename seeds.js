@@ -41,11 +41,11 @@ async function seedDB () {
 	    campground.comments.push(comment);
 	    campground.save();
 	    console.log('comment added to campground');
-	}
+*/	}
     } catch (err) {
 	console.log(err);
     }
-*/
+
 };
 
 module.exports = seedDB;
