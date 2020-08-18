@@ -44,10 +44,6 @@ async function seedDB () {
     } catch (err) {
 	console.log(err);
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> parent of 31f889c... remove invalid seed campground creation from seed.js
 };
 
 module.exports = seedDB;
