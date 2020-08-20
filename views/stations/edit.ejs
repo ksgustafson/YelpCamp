@@ -1,0 +1,27 @@
+<%- include('../partials/header') %>
+
+<div class="container">
+    <div class="row">
+	<h1 style="text-align: center;">Edit <%= station.name %></h1>
+
+	<div style="width: 30%; margin: 30px auto;">
+	    <form action="/stations/<%= station._id %>?_method=put" method="post">
+		<div class="form-group">
+		    <input type="text" value="<%= station.name %>" name="station[name]" class="form-control">
+		</div>
+		<div class="form-group">
+		    <input type="text" value="<%= station.source %>" name="station[source]" class="form-control">
+		</div>
+		<div class="form-group">
+		    <input type="text" value="<%= station.description %>" name="station[description]" class="form-control">
+		</div>
+		<div class="form-group">
+		    <button class="btn btn-primary btn-lg btn-block">Submit</button>
+		</div>
+	    </form>
+	    <a href="/stations/<%= station._id %>">Go Back</a>
+	</div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

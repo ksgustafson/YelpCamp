@@ -1,10 +1,9 @@
 const mongoose = require('mongoose');
 
-// campgrounds contain a name, image, description and comments
-const campgroundSchema = new mongoose.Schema({
+// stations contain a name, source, description and comments
+const stationSchema = new mongoose.Schema({
     name: String,
-    price: String,
-    image: String,
+    source: String,
     description: String,
     author: {
 	id: {
@@ -21,5 +20,5 @@ const campgroundSchema = new mongoose.Schema({
     ]
 });
 
-// export Campground model object
-module.exports = mongoose.model('Campground', campgroundSchema);
+// export Station model object
+module.exports = mongoose.model('Station', stationSchema);

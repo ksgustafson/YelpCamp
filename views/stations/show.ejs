@@ -2,28 +2,27 @@
 <div class="container">
     <div class="row">
 	<div class="col-md-3">
-	    <p class="lead">YelpCamp</p>
+	    <p class="lead">Hyper-Free Form Radio</p>
 	    <div class="list-group">
 		<li class="list-group-item active">Info 1</li>
 		<li class="list-group-item">Info 2</li>
 		<li class="list-group-item">Info 3</li>
 	    </div>
-	    <!-- map will go here eventually -->
 	</div>
 	<div class="col-md-9">
 	    <div class="thumbnail">
-		<img class="img-responsive" src="<%= campground.image %>"></img>
+		<!-- change this class after some testing -->
+		<audio controls class="player" src="<%= station.source %>"></audio>
 		<div class="caption-full">
-		    <h4 class="pull-right">$<%= campground.price %>/night</h4>
-		    <h4><a><%= campground.name %></a></h4>
-		    <p><%= campground.description %></p>
+		    <h4><a><%= station.name %></a></h4>
+		    <p><%= station.description %></p>
 		    <p>
-			<em>Submitted By <%= campground.author.username %></em>
+			<em>Submitted By <%= station.author.username %></em>
 		    </p>
-		    <% if (currentUser && campground.author.id.equals(currentUser._id)) { %>
-			<a class="btn btn-warning" href="/campgrounds/<%= campground._id %>/edit">Edit</a>
+		    <% if (currentUser && station.author.id.equals(currentUser._id)) { %>
+			<a class="btn btn-warning" href="/stations/<%= station._id %>/edit">Edit</a>
 			<form class="delete-form"
-			      action="/campgrounds/<%= campground._id %>?_method=delete" method="post">
+			      action="/stations/<%= station._id %>?_method=delete" method="post">
 			    <button class="btn btn-danger">Delete</button>
 			</form>
 		    <% } %>
@@ -31,12 +30,12 @@
 	    </div>
 	    <div class="well">
 		<div class="text-right">
-		    <a class="btn btn-success" href="/campgrounds/<%= campground._id %>/comments/new">
+		    <a class="btn btn-success" href="/stations/<%= station._id %>/comments/new">
 			Add New Comment
 		    </a>
 		</div>
 		<hr>
-		<% campground.comments.forEach( function (comment) { %>
+		<% station.comments.forEach( function (comment) { %>
 		    <div class="row">
 			<div class="col-md-12">
 			    <strong><%= comment.author.username %></strong>
@@ -46,11 +45,11 @@
 			    </p>
 			    <% if (currentUser && comment.author.id.equals(currentUser._id)) { %>
 				<a class="btn btn-xs btn-warning"
-				   href="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>/edit">
+				   href="/stations/<%= station._id %>/comments/<%= comment._id %>/edit">
 				    Edit
 				</a>
 				<form class="delete-form"
-				      action="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>?_method=delete"
+				      action="/stations/<%= station._id %>/comments/<%= comment._id %>?_method=delete"
 				      method="post">
 				    <input type="submit" class="btn btn-xs btn-danger" value="Delete">
 				</form>

@@ -22,8 +22,8 @@ router.post('/register', function (req, res) {
 	    res.redirect('/register');
 	}
 	passport.authenticate("local") (req, res, function() {
-	    req.flash('success', `Welcome to YelpCamp ${user.username}!`);
-	    res.redirect('/campgrounds');
+	    req.flash('success', `Welcome to Hyper-Free Form Radio ${user.username}!`);
+	    res.redirect('/stations');
 	});
     });
 });
@@ -36,7 +36,7 @@ router.get('/login', function (req, res) {
 // login logic
 router.post('/login', passport.authenticate('local',
     {
-	successRedirect: '/campgrounds',
+	successRedirect: '/stations',
 	failureRedirect: '/login',
 	failureFlash: true
     }), function (req, res) {
@@ -46,7 +46,7 @@ router.post('/login', passport.authenticate('local',
 router.get('/logout', function (req, res) {
     req.logout();
     req.flash('success', 'You have been logged out!');
-    res.redirect('/campgrounds');
+    res.redirect('/stations');
 });
 
 // export router

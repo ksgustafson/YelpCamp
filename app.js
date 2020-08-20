@@ -3,7 +3,7 @@
 const PORT = process.env.PORT || 3000;
 
 // get database url from environment
-const databaseURL = process.env.DATABASEURL || 'mongodb://localhost:27017/yelp_camp';
+const databaseURL = process.env.DATABASEURL || 'mongodb://localhost:27017/radio';
 
 const express        = require('express'),
       app            = express(),
@@ -13,15 +13,15 @@ const express        = require('express'),
       passport       = require('passport'),
       LocalStrategy  = require('passport-local'),
       methodOverride = require('method-override'),
-      Campground     = require('./models/campground'),
+      Station        = require('./models/station'),
       Comment        = require('./models/comment'),
       User           = require('./models/user'),
       seedDB         = require('./seeds');
 
 // require routes
-const commentRoutes    = require('./routes/comments'),
-      campgroundRoutes = require('./routes/campgrounds'),
-      indexRoutes       = require('./routes/index');
+const commentRoutes = require('./routes/comments'),
+      stationRoutes = require('./routes/stations'),
+      indexRoutes   = require('./routes/index');
 
 mongoose.connect(databaseURL, {
     useNewUrlParser: true,
@@ -37,7 +37,8 @@ app.use(express.static(`${__dirname}/public`));
 app.use(methodOverride('_method'));
 app.use(flash());
 
-// seed database with campgrounds and comments
+// seed database with stations and comments, but will break show pages
+// when logged in as no author is assigned
 // seedDB();
 
 // passport configuration
@@ -74,9 +75,9 @@ app.use( function (req, res, next) {
 
 // use routes
 app.use('/', indexRoutes);
-app.use('/campgrounds', campgroundRoutes);
-app.use('/campgrounds/:id/comments', commentRoutes);
+app.use('/stations', stationRoutes);
+app.use('/stations/:id/comments', commentRoutes);
 
 app.listen(PORT, function () {
-    console.log(`YelpCamp server is listening on port ${PORT}.`);
+    console.log(`server is listening on port ${PORT}.`);
 });

@@ -3,24 +3,24 @@
 <div class="container">
     <header class="jumbotron">
 	<div>
-	    <h1>Is This YelpCamp?</h1>
-	    <p>I cannot vouch for the existence of these campgrounds...</p>
+	    <h1>Hyper-Free Form Radio</h1>
+	    <p>I cannot vouch for the existence of these stations...</p>
 	    <p>
-		<a href="/campgrounds/new" class="btn btn-primary btn-lg">Add New Campground</a>
+		<a href="/stations/new" class="btn btn-primary btn-lg">Add New Station</a>
 	    </p>
 	</div>
     </header>
 
     <div class="row text-center" style="display:flex; flex-wrap: wrap">
-	<% campgrounds.forEach( function (campground) { %>
+	<% stations.forEach( function (station) { %>
 	    <div class="col-md-3 col-sm-6">
 		<div class="thumbnail">
-		    <img src="<%= campground.image %>">
 		    <div class="caption">
-			<h4><%= campground.name %></h4>
+			<h4><%= station.name %></h4>
 		    </div>
+		    <audio controls class="player" src="<%= station.source %>"></audio>
 		    <p>
-			<a href="/campgrounds/<%= campground._id %>" class="btn btn-primary">More Info</a>
+			<a href="/stations/<%= station._id %>" class="btn btn-primary">More Info</a>
 		    </p>
 		</div>
 	    </div>

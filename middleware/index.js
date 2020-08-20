@@ -1,20 +1,20 @@
-const Campground = require('../models/campground');
+const Station = require('../models/station');
 const Comment = require('../models/comment');
 
 // all middleware defined here
 const middlewareObj = {}
 
-middlewareObj.checkCampgroundOwnership = function (req, res, next) {
+middlewareObj.checkStationOwnership = function (req, res, next) {
     // is user logged in?
     if (req.isAuthenticated()) {
-	Campground.findById(req.params.id, function (err, foundCampground) {
-	    if (err || !foundCampground) {
-		req.flash('error', 'Campground not found.');
+	Station.findById(req.params.id, function (err, foundStation) {
+	    if (err || !foundStation) {
+		req.flash('error', 'Station not found.');
 		res.redirect('back');
 	    } else {
-		// does the user own the campground?
+		// does the user own the station?
 		//  .equals method provided by mongoose as its id is not a string, it is an object
-		if (foundCampground.author.id.equals(req.user._id)) {
+		if (foundStation.author.id.equals(req.user._id)) {
 		    next();
 		} else {
 		    req.flash('error', 'You do not have permission to do that.');

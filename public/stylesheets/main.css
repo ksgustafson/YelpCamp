@@ -4,8 +4,9 @@ body {
     flex-direction: column;
 }
 
-.thumbnail img {
+.thumbnail audio {
     width: 100%;
+    margin: 10px 0;
 }
 
 .thumbnail {

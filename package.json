@@ -1,7 +1,7 @@
 {
-  "name": "yelpcamp",
+  "name": "yelpcamp-radio",
   "version": "1.0.0",
-  "description": "yelp clone for campgrounds",
+  "description": "database of streaming radio",
   "main": "app.js",
   "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
